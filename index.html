@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AWS Contact Form</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: white;
+      padding: 30px;
+      width: 350px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    input, textarea, button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px;
+      font-size: 15px;
+    }
+
+    button {
+      background: #ff9900;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #result {
+      margin-top: 15px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h2>Contact Us</h2>
+
+    <input type="text" id="name" placeholder="Enter your name">
+    <input type="email" id="email" placeholder="Enter your email">
+    <textarea id="message" placeholder="Enter your message"></textarea>
+
+    <button onclick="sendMessage()">Submit</button>
+
+    <p id="result"></p>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const apiUrl = "https://k69tu5a2c3.execute-api.ap-south-1.amazonaws.com/contact";
+
+      const data = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        message: document.getElementById("message").value
+      };
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      document.getElementById("result").innerText = result.message || result.error;
+    }
+  </script>
+
+</body>
+</html>
